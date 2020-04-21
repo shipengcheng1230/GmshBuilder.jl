@@ -19,4 +19,5 @@ jobs:
       - name: Package Official SDK
         env:
           GITHUB_TOKEN: ${{ secrets.MY_ACCESS_TOKEN }}
+          BINARYBUILDER_AUTOMATIC_APPLE: true
         run: julia build_tarballs.jl --verbose --deploy=shipengcheng1230/Gmsh_jll.jl

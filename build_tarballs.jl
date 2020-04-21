@@ -5,8 +5,6 @@ using BinaryBuilder, Pkg
 name = "Gmsh_SDK"
 version = v"4.5.6"
 
-ENV["BINARYBUILDER_AUTOMATIC_APPLE"] = true
-
 # Collection of sources required to complete build
 
 sources = [
