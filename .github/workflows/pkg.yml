@@ -1,0 +1,18 @@
+name: Package
+
+on:
+  push:
+    tags: '*'
+
+job:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: julia-actions/setup-julia@latest
+        with:
+            version: '1.4'
+      - name: Package Official SDK
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: julia build_tarballs.jl --verbose --deploy=shipengcheng1230/Gmsh_jll.jl
