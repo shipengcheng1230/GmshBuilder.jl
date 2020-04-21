@@ -26,7 +26,9 @@ jobs:
           df -h
 
       - name: Set up git user.name
-        run: git config --global user.name "Shi Pengcheng"
+        run: |
+          git config --global user.name "Shi Pengcheng"
+          git config --global user.email "shipengcheng1230@gmail.com"
 
       - name: Install dependencies
         run: julia -e 'using Pkg; Pkg.add("BinaryBuilder")'
