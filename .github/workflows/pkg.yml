@@ -16,5 +16,5 @@ jobs:
         run: julia -e 'using Pkg; Pkg.add("BinaryBuilder")'
       - name: Package Official SDK
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.MY_ACCESS_TOKEN }}
         run: julia build_tarballs.jl --verbose --deploy=shipengcheng1230/Gmsh_jll.jl

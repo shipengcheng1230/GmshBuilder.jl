@@ -12,7 +12,7 @@ sources = [
 ]
 
 # Bash recipe for building across all platforms
-script = "export gmsh_version=$(version)" * raw"""
+script = "export gmsh_version=$(version)\n" * raw"""
 cd $WORKSPACE/srcdir
 
 if [[ "${target}" == *-mingw* ]]; then
