@@ -17,13 +17,16 @@ jobs:
       - name: Install necessary libs
         run: sudo apt-get install libglu1
 
-      - name: free disk space
+      - name: Free disk space
         run: |
           sudo swapoff -a
           sudo rm -f /swapfile
           sudo apt clean
           docker rmi $(docker image ls -aq)
           df -h
+
+      - nama: Set up git user.name
+        run: git config --global user.name "Shi Pengcheng"
 
       - name: Install dependencies
         run: julia -e 'using Pkg; Pkg.add("BinaryBuilder")'
