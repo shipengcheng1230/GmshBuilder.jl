@@ -3,7 +3,12 @@
 using BinaryBuilder, Pkg
 
 name = "Gmsh_SDK"
-version = v"4.5.6"
+version = get(ENV, "LATEST_GMSH_VERSION", nothing)
+
+if version === nothing
+    @info "Match latest version. No build will be performed."
+    exit(0)
+end
 
 # Collection of sources required to complete build
 
