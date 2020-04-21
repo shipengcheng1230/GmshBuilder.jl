@@ -25,7 +25,7 @@ jobs:
           docker rmi $(docker image ls -aq)
           df -h
 
-      - nama: Set up git user.name
+      - name: Set up git user.name
         run: git config --global user.name "Shi Pengcheng"
 
       - name: Install dependencies
