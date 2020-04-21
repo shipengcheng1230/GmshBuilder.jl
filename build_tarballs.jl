@@ -2,7 +2,7 @@
 # `julia build_tarballs.jl --help` to see a usage message.
 using BinaryBuilder, Pkg
 
-name = "Gmsh-SDK"
+name = "Gmsh_SDK"
 version = v"4.5.6"
 
 # Collection of sources required to complete build
@@ -14,6 +14,7 @@ sources = [
 # Bash recipe for building across all platforms
 script = "export gmsh_version=$(version)\n" * raw"""
 cd $WORKSPACE/srcdir
+apk add mesa-dev
 
 if [[ "${target}" == *-mingw* ]]; then
     wget http://gmsh.info/bin/Windows/gmsh-${gmsh_version}-Windows${nbits}-sdk.zip
