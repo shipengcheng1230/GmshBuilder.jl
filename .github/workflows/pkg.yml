@@ -12,6 +12,8 @@ jobs:
       - uses: julia-actions/setup-julia@latest
         with:
             version: '1.4'
+      - name: Install necessary libs
+        run: sudo apt-get install libglu1
       - name: Install dependencies
         run: julia -e 'using Pkg; Pkg.add("BinaryBuilder")'
       - name: Package Official SDK

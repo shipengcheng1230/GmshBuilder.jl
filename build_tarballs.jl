@@ -16,7 +16,6 @@ sources = [
 # Bash recipe for building across all platforms
 script = "export gmsh_version=$(version)\n" * raw"""
 cd $WORKSPACE/srcdir
-apk add glu
 
 if [[ "${target}" == *-mingw* ]]; then
     wget http://gmsh.info/bin/Windows/gmsh-${gmsh_version}-Windows${nbits}-sdk.zip
