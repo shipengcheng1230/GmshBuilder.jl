@@ -38,18 +38,15 @@ function get_latest_version_from_repo(repo_url)
 end
 
 const url_jll = "shipengcheng1230/Gmsh_jll.jl"
-const url_builder = "shipengcheng1230/GmshBuilder.jl"
 
 v₁ = get_latest_version_from_gmsh_web()
 v₂ = get_latest_version_from_repo(url_jll)
-v₃ = get_latest_version_from_repo(url_builder)
 
 @info "Latest Gmsh SDK Version: $(v₁)"
-@info "Current Tagged Builder Version: $(v₂)"
-@info "Current Gmsh_SDK_jll.jl Version: $(v₃)"
+@info "Current Gmsh_SDK_jll.jl Version: $(v₂)"
 
 if abspath(PROGRAM_FILE) == @__FILE__
-    if v₁ > v₂ && v₁ > v₃
+    if v₁ > v₂
         pkg"add BinaryBuilder"
         ENV["LATEST_GMSH_VERSION"] = v₁
         push!(ARGS, "--deploy=shipengcheng1230/Gmsh_jll.jl")

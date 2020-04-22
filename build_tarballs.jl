@@ -5,18 +5,22 @@ using BinaryBuilder, Pkg
 name = "Gmsh_SDK"
 
 local_build = get(ENV, "LOCAL_BUILD_JLL", nothing)
+
 version = get(ENV, "LATEST_GMSH_VERSION", nothing)
+if version === nothing
+    verison = get(ENV, "GITHUB_REF", nothing) # release trigger
+end
 
 if local_build === nothing
     @info "Retrieve latest version."
     include(joinpath(@__DIR__, "check_version.jl"))
     if version === nothing
-        version = v₂
+        version = v₁
     else
         version = VersionNumber(version)
     end
-    if version ≤ v₃
-        @info "Attempt to build $(version) ≤ Current Gmsh SDK JLL $(v₃), abort building."
+    if version ≤ v₂
+        @info "Attempt to build $(version) ≤ Current Gmsh SDK JLL $(v₂), abort building."
         exit(0)
     end
 else
