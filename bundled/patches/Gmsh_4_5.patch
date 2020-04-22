@@ -1,0 +1,13 @@
+diff --git a/gmsh.jl b/gmsh.jl
+index a0b5ce1..47f22cb 100644
+--- a/gmsh.jl
++++ b/gmsh.jl
+@@ -21,7 +21,7 @@ const GMSH_API_VERSION = "4.5"
+ const GMSH_API_VERSION_MAJOR = 4
+ const GMSH_API_VERSION_MINOR = 5
+ const libdir = dirname(@__FILE__)
+-const libname = Sys.iswindows() ? "gmsh-4.5" : "libgmsh"
++const libname = "libgmsh"
+ import Libdl
+ const lib = Libdl.find_library([libname], [libdir])
+ 

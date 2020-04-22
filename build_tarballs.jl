@@ -4,30 +4,45 @@ using BinaryBuilder, Pkg
 
 name = "Gmsh_SDK"
 
-include(joinpath(@__DIR__, "check_version.jl"))
-version = get(ENV, "LATEST_GMSH_VERSION", nothing)
-version === nothing && (version = v₂)
+local_build = get(ENV, "LOCAL_BUILD_JLL", nothing)
+version = get(ENV, "LATEST_GMSH_VERSION", nothing) |> VersionNumber
 
-if version ≤ v₃
-    @info "Latest build version detected $(version), abort building."
-    exit(0)
+if local_build === nothing
+    @info "Retrieve latest version."
+    include(joinpath(@__DIR__, "check_version.jl"))
+    version === nothing && (version = v₂)
+    if version ≤ v₃
+        @info "Latest build version matched $(version), abort building."
+        exit(0)
+    end
+else
+    @info "Local build"
 end
+
+@info "Attempt to build Gmsh SDK $(version)"
 
 # Collection of sources required to complete build
 
 sources = [
-    ArchiveSource("http://gmsh.info/src/gmsh-$(version)-source.tgz", "46eaeb0cdee5822fdaa4b15f92d8d160a8cc90c4565593cfa705de90df2a463f")
+    ArchiveSource("http://gmsh.info/src/gmsh-$(version)-source.tgz", "46eaeb0cdee5822fdaa4b15f92d8d160a8cc90c4565593cfa705de90df2a463f"),
+    DirectorySource("./bundled"),
 ]
 
 # Bash recipe for building across all platforms
-script = "export gmsh_version=$(version)\n" * raw"""
+script = "export gmsh_version=$(version)\n" *
+"export gmsh_windows_patch=\$WORKSPACE/srcdir/patches/Gmsh_$(version.major)_$(version.minor).patch\n" *
+raw"""
 cd $WORKSPACE/srcdir
 
 if [[ "${target}" == *-mingw* ]]; then
     wget http://gmsh.info/bin/Windows/gmsh-${gmsh_version}-Windows${nbits}-sdk.zip
     unzip gmsh*sdk.zip
-    mv ${libdir}/gmsh*.${dlext} ${libdir}/libgmsh.${dlext}
-    cp -L gmsh*sdk/lib/* gmsh*sdk/bin
+    dos2unix gmsh*sdk/lib/gmsh.jl
+    dos2unix ${gmsh_windows_patch}
+    atomic_patch -p0 gmsh*sdk/lib/gmsh.jl ${gmsh_windows_patch}
+    mv gmsh*sdk/lib/gmsh*.${dlext} libgmsh.${dlext}
+    mv libgmsh.${dlext} gmsh*sdk/lib/
+    mv gmsh*sdk/lib/* gmsh*sdk/bin
     cp -r -L gmsh*sdk/* ${prefix}
 fi
 
