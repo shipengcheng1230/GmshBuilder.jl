@@ -3,7 +3,7 @@ name: Package
 on:
   release:
     types:
-      - created
+      - published
 
 jobs:
   build:
