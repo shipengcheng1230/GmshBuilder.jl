@@ -26,9 +26,9 @@ cd $WORKSPACE/srcdir
 if [[ "${target}" == *-mingw* ]]; then
     wget http://gmsh.info/bin/Windows/gmsh-${gmsh_version}-Windows${nbits}-sdk.zip
     unzip gmsh*sdk.zip
+    mv ${libdir}/gmsh*.${dlext} ${libdir}/libgmsh.${dlext}
     cp -L gmsh*sdk/lib/* gmsh*sdk/bin
     cp -r -L gmsh*sdk/* ${prefix}
-    ln -sf ${libdir}/gmsh*.${dlext} ${libdir}/libgmsh.${dlext}
 fi
 
 if [[ "${target}" == *apple* ]]; then

@@ -23,8 +23,16 @@ function get_latest_version_from_gmsh_web()
 end
 
 function get_latest_version_from_repo(repo_url)
-    rp = repo(repo_url)
-    rels, = releases(GitHub.DEFAULT_API, rp)
+    rels = try
+         releases(GitHub.DEFAULT_API, repo(repo_url))[1]
+    catch e
+        if occursin("Not Found", e.msg)
+            # didn't found the repo
+            []
+        else
+            throw(e)
+        end
+    end
     isempty(rels) && return typemin(VersionNumber)
     match(r"\d\.\d\.\d", rels[1].tag_name).match |> VersionNumber
 end
@@ -41,10 +49,10 @@ v₃ = get_latest_version_from_repo(url_builder)
 @info "Current Gmsh_SDK_jll.jl Version: $(v₃)"
 
 if abspath(PROGRAM_FILE) == @__FILE__
-
     if v₁ > v₂ && v₁ > v₃
         pkg"add BinaryBuilder"
         ENV["LATEST_GMSH_VERSION"] = v₁
         push!(ARGS, "--deploy=shipengcheng1230/Gmsh_jll.jl")
         include(joinpath(@__DIR__, "build_tarballs.jl"))
     end
+end
