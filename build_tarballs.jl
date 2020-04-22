@@ -5,14 +5,15 @@ using BinaryBuilder, Pkg
 name = "Gmsh_SDK"
 
 local_build = get(ENV, "LOCAL_BUILD_JLL", nothing)
-version = get(ENV, "LATEST_GMSH_VERSION", nothing) |> VersionNumber
+version = get(ENV, "LATEST_GMSH_VERSION", nothing)
 
 if local_build === nothing
     @info "Retrieve latest version."
     include(joinpath(@__DIR__, "check_version.jl"))
     version === nothing && (version = v₂)
+    version !== nothing && (version = VersionNumber(version))
     if version ≤ v₃
-        @info "Latest build version matched $(version), abort building."
+        @info "Attempt to build $(version) ≤ Current Gmsh SDK JLL $(v₃), abort building."
         exit(0)
     end
 else
