@@ -3,10 +3,13 @@
 using BinaryBuilder, Pkg
 
 name = "Gmsh_SDK"
-version = get(ENV, "LATEST_GMSH_VERSION", nothing)
 
-if version === nothing
-    @info "Match latest version. No build will be performed."
+include(joinpath(@__DIR__, "check_version.jl"))
+version = get(ENV, "LATEST_GMSH_VERSION", nothing)
+version === nothing && (version = v₂)
+
+if version ≤ v₃
+    @info "Latest build version detected $(version), abort building."
     exit(0)
 end
 
@@ -36,6 +39,7 @@ fi
 
 if [[ "${target}" == *apple* ]] || [[ "${target}" == *linux* ]]; then
     tar zxf gmsh*.tgz
+    find gmsh*sdk/lib -type l -delete
     cp -r -L gmsh*sdk/* ${prefix}
 fi
 
