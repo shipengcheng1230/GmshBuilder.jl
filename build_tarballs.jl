@@ -4,30 +4,32 @@ using BinaryBuilder, Pkg
 
 name = "Gmsh_SDK"
 
-local_build = get(ENV, "LOCAL_BUILD_JLL", nothing)
+autodetect = get(ENV, "AUTO_DETECT", nothing)
+version = get(ENV, "GITHUB_REF", nothing) # release trigger
 
-version = get(ENV, "LATEST_GMSH_VERSION", nothing)
 if version === nothing
-    verison = get(ENV, "GITHUB_REF", nothing) # release trigger
-end
-
-if local_build === nothing
-    @info "Retrieve latest version."
-    include(joinpath(@__DIR__, "check_version.jl"))
-    if version === nothing
-        version = v₁
-    else
-        version = VersionNumber(version)
-    end
-    if version ≤ v₂
-        @info "Attempt to build $(version) ≤ Current Gmsh SDK JLL $(v₂), abort building."
+    if autodetect === nothing
+        @info "No version specified and no AUTO_DETECT enabled, abort building."
         exit(0)
+    else
+        @info "Retrieve latest version"
+        include(joinpath(@__DIR__, "check_version.jl"))
+        v₁ = get_latest_version_from_gmsh_web()
+        v₂ = get_latest_version_from_repo(url_jll)
+        @info "Latest Gmsh SDK Version: $(v₁)"
+        @info "Current Gmsh_SDK_jll.jl Version: $(v₂)"
+        version = v₁
+        if version ≤ v₂
+            @info "Attempt to build $(version) ≤ Current Gmsh SDK JLL $(v₂), abort building."
+            exit(0)
+        end
     end
 else
-    @info "Local build"
+    autodetect === nothing || @info "Ignore AUTO_DETECT when version is forced."
+    version = VersionNumber(version)
 end
 
-@info "Attempt to build Gmsh SDK $(version)"
+@info "Building Gmsh SDK $(version)"
 
 # Collection of sources required to complete build
 
@@ -48,10 +50,10 @@ if [[ "${target}" == *-mingw* ]]; then
     dos2unix gmsh*sdk/lib/gmsh.jl
     dos2unix ${gmsh_windows_patch}
     atomic_patch -p0 gmsh*sdk/lib/gmsh.jl ${gmsh_windows_patch}
-    mv gmsh*sdk/lib/gmsh*.${dlext} libgmsh.${dlext}
-    mv libgmsh.${dlext} gmsh*sdk/lib/
-    mv gmsh*sdk/lib/* gmsh*sdk/bin
+    cp -L gmsh*sdk/lib/* gmsh*sdk/bin
     cp -r -L gmsh*sdk/* ${prefix}
+    cd ${libdir}
+    mv gmsh*.${dlext} libgmsh.${dlext}
 fi
 
 if [[ "${target}" == *apple* ]]; then
@@ -63,6 +65,9 @@ fi
 if [[ "${target}" == *apple* ]] || [[ "${target}" == *linux* ]]; then
     tar zxf gmsh*.tgz
     find gmsh*sdk/lib -type l -delete
+    cd gmsh*sdk/lib
+    mv libgmsh* libgmsh.${dlext}
+    cd $WORKSPACE/srcdir
     cp -r -L gmsh*sdk/* ${prefix}
 fi
 
