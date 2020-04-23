@@ -41,4 +41,4 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.MY_ACCESS_TOKEN }}
           BINARYBUILDER_AUTOMATIC_APPLE: true
           AUTO_DETECT: true
-        run: julia build_tarballs.jl --deploy=shipengcheng1230/Gmsh_jll.jl
+        run: julia build_tarballs.jl --deploy=shipengcheng1230/Gmsh_SDK_jll.jl
