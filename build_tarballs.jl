@@ -7,8 +7,6 @@ name = "Gmsh_SDK"
 autodetect = get(ENV, "AUTO_DETECT", nothing)
 version = get(ENV, "GITHUB_REF", nothing) # release trigger
 
-version = "refs/tags/4.5.6"
-
 if !occursin("refs/tags", version)
     @info "Triggered by other events: $(version), abort building!"
     exit(0)
