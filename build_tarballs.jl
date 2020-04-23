@@ -59,7 +59,7 @@ if [[ "${target}" == *-mingw* ]]; then
     dos2unix gmsh*sdk/lib/gmsh.jl
     dos2unix ${gmsh_windows_patch}
     atomic_patch -p0 gmsh*sdk/lib/gmsh.jl ${gmsh_windows_patch}
-    cp -L gmsh*sdk/lib/* gmsh*sdk/bin
+    mv gmsh*sdk/lib/* gmsh*sdk/bin
     cp -r -L gmsh*sdk/* ${prefix}
     cd ${libdir}
     mv gmsh*.${dlext} libgmsh.${dlext}
