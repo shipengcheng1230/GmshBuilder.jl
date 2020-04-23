@@ -37,4 +37,4 @@ function get_latest_version_from_repo(repo_url)
     match(r"\d\.\d\.\d", rels[1].tag_name).match |> VersionNumber
 end
 
-const url_jll = "shipengcheng1230/Gmsh_jll.jl"
+const url_jll = "shipengcheng1230/Gmsh_SDK_jll.jl"
