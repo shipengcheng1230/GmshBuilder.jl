@@ -41,7 +41,7 @@ end
 # Collection of sources required to complete build
 
 sources = [
-    ArchiveSource("http://gmsh.info/src/gmsh-$(version)-source.tgz", "46eaeb0cdee5822fdaa4b15f92d8d160a8cc90c4565593cfa705de90df2a463f"),
+    ArchiveSource("http://gmsh.info/src/gmsh-$(version)-source.tgz", "0f2c55e50fb6c478ebc8977f6341c223754cbf3493b7b0d683b4395ae9f2ad1c"),
     DirectorySource("./bundled"),
 ]
 
