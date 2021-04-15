@@ -1,5 +1,11 @@
 # GmshBuilder.jl
 
+## Update
+
+Please instead use the official JLL https://github.com/JuliaBinaryWrappers/gmsh_jll.jl
+
+---
+
 ![](https://github.com/shipengcheng1230/GmshBuilder.jl/workflows/Package/badge.svg)
 
 ![GitHub release](https://img.shields.io/github/v/release/shipengcheng1230/Gmsh_jll.jl?label=Latest%20Release)
